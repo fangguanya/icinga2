@@ -440,7 +440,7 @@ void Utility::Sleep(double timeout)
  */
 String Utility::NewUniqueID(void)
 {
-	static boost::mutex mutex;
+	static std::mutex mutex;
 	static int next_id = 0;
 
 	/* I'd much rather use UUIDs but RHEL is way too cool to have
@@ -455,7 +455,7 @@ String Utility::NewUniqueID(void)
 	id += Convert::ToString((long)Utility::GetTime()) + "-";
 
 	{
-		boost::mutex::scoped_lock lock(mutex);
+		std::lock_guard<std::mutex> lock(mutex);
 		id += Convert::ToString(next_id);
 		next_id++;
 	}

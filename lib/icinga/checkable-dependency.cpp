@@ -25,37 +25,37 @@ using namespace icinga;
 
 void Checkable::AddDependency(const Dependency::Ptr& dep)
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	m_Dependencies.insert(dep);
 }
 
 void Checkable::RemoveDependency(const Dependency::Ptr& dep)
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	m_Dependencies.erase(dep);
 }
 
 std::set<Dependency::Ptr> Checkable::GetDependencies(void) const
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	return m_Dependencies;
 }
 
 void Checkable::AddReverseDependency(const Dependency::Ptr& dep)
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	m_ReverseDependencies.insert(dep);
 }
 
 void Checkable::RemoveReverseDependency(const Dependency::Ptr& dep)
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	m_ReverseDependencies.erase(dep);
 }
 
 std::set<Dependency::Ptr> Checkable::GetReverseDependencies(void) const
 {
-	boost::mutex::scoped_lock lock(m_DependencyMutex);
+	std::lock_guard<std::mutex> lock(m_DependencyMutex);
 	return m_ReverseDependencies;
 }
 

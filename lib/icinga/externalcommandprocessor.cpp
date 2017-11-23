@@ -53,9 +53,9 @@ struct ExternalCommandInfo
 	size_t MaxArgs;
 };
 
-static boost::mutex& GetMutex(void)
+static std::mutex& GetMutex(void)
 {
-	static boost::mutex mtx;
+	static std::mutex mtx;
 	return mtx;
 }
 static std::map<String, ExternalCommandInfo>& GetCommands(void)
@@ -68,7 +68,7 @@ boost::signals2::signal<void (double, const String&, const std::vector<String>&)
 
 static void RegisterCommand(const String& command, const ExternalCommandCallback& callback, size_t minArgs = 0, size_t maxArgs = UINT_MAX)
 {
-	boost::mutex::scoped_lock lock(GetMutex());
+	std::lock_guard<std::mutex> lock(GetMutex());
 	ExternalCommandInfo eci;
 	eci.Callback = callback;
 	eci.MinArgs = minArgs;
@@ -112,7 +112,7 @@ void ExternalCommandProcessor::Execute(double time, const String& command, const
 	ExternalCommandInfo eci;
 
 	{
-		boost::mutex::scoped_lock lock(GetMutex());
+		std::lock_guard<std::mutex> lock(GetMutex());
 
 		auto it = GetCommands().find(command);
 
